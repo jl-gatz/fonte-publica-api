@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel
+
 
 class RecordBase(BaseModel):
     title: str
@@ -8,8 +10,10 @@ class RecordBase(BaseModel):
     entity_id: Optional[str]
     source_id: Optional[str]
 
+
 class RecordCreate(RecordBase):
     pass
+
 
 class RecordOut(RecordBase):
     id: str
@@ -18,4 +22,4 @@ class RecordOut(RecordBase):
     provenance_hash: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
