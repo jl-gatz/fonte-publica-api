@@ -1,21 +1,22 @@
-from fastapi import FastAPI
 from api.v1.router import api_router
-from core.config import settings
+from fastapi import FastAPI
 
 
 app = FastAPI(
     title="Fonte Pública API",
-    description="API pública de dados jornalísticos com foco em transparência, proveniência e correções",
-    version="1.0.0",
-    terms_of_service="https://fontepublica.org/termos",
+    description=(
+        "API de dados públicos voltada a jornalismo, pesquisa e educação, "
+        "com foco em transparência, proveniência e correções."
+    ),
+    version="0.1.0",
+    terms_of_service="https://www.notion.so/Fonte-P-blica-Termos-de-uso-e-princ-pios-2f987579f47780099039d55270281d44",
     contact={
         "name": "Fonte Pública",
-        "url": "https://fontepublica.org",
-        "email": "contato@fontepublica.org",
+        "url": "https://github.com/jl-gatz/fonte-publica-api/issues",
     },
     license_info={
-        "name": "CC BY 4.0",
-        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "name": "Apache License 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     },
 )
 
