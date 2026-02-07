@@ -10,7 +10,7 @@ def get_current_role() -> Role:
 
 def require_role(required: Role):
     def checker(role: Role = Depends(get_current_role)):
-        if role not in (required, Role.admin):
+        if role not in (required, Role.admin):  # noqa: PLR6201
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Permissão insuficiente",
