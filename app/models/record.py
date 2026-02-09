@@ -4,14 +4,11 @@ import uuid
 from datetime import datetime, timezone
 from typing import Dict, Optional
 
-from db.base import Base
 from sqlalchemy import JSON, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
-
-class Base(DeclarativeBase):
-    pass
+from app.db.base import Base
 
 
 class Record(Base):
@@ -75,7 +72,8 @@ class Record(Base):
         index=True,
     )
 
-    metadata: Mapped[Dict] = mapped_column(
+    attributes: Mapped[Dict] = mapped_column(
+        "metadata",
         JSON,
         default=dict,
         nullable=False,

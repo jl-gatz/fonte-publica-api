@@ -17,7 +17,7 @@ class RecordBase(BaseModel):
     title: str
     summary: Optional[str]
     source: SourceSchema
-    metadata: Optional[Dict] = Field(default_factory=dict)
+    attributes: Optional[Dict] = Field(default_factory=dict)
 
 
 class RecordCreate(RecordBase):

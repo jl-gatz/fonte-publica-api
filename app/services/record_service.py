@@ -2,9 +2,10 @@ import hashlib
 import json
 from datetime import datetime, timezone
 
-from models.record import Record
-from schemas.record import RecordCreate
 from sqlalchemy.orm import Session
+
+from app.models.record import Record
+from app.schemas.record import RecordCreate, RecordResponse
 
 
 def generate_hash(payload: dict) -> str:
@@ -24,3 +25,10 @@ def create_record(db: Session, data: RecordCreate) -> Record:
     db.commit()
     db.refresh(record)
     return record
+
+
+def list_records_service(db: Session) -> list[RecordResponse]:
+    records = db.query(Record).all()
+
+    # Mesmo vazio, retorna lista
+    return [RecordResponse.model_validate(record) for record in records]

@@ -1,13 +1,25 @@
-from db.session import get_db
-from fastapi import APIRouter, Depends
-from schemas.record import RecordCreate, RecordResponse
-from services.record_service import create_record
-from sqlalchemy.orm import Session
+from http import HTTPStatus
+from typing import List
 
-router = APIRouter(prefix="/records", tags=["records"])
+from fastapi import APIRouter
+
+from app.db.types import DbSession
+from app.schemas.record import RecordCreate, RecordResponse
+from app.services.record_service import create_record, list_records_service
+
+router = APIRouter()
 
 
-@router.post("/", response_model=RecordResponse, status_code=201)
-def create_new_record(payload: RecordCreate, db: Session = Depends(get_db)):
+@router.post("/", status_code=HTTPStatus.CREATED)
+def create_new_record(payload: RecordCreate, db: DbSession) -> RecordResponse:
     record = create_record(db, payload)
     return record
+
+
+@router.get(
+    "",
+    response_model=List[RecordResponse],
+    status_code=HTTPStatus.OK,
+)
+def list_records(db: DbSession):
+    return list_records_service(db)
