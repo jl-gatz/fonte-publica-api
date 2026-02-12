@@ -1,20 +1,26 @@
-from sqlalchemy import create_engine
+from typing import Annotated, Generator
+
+from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.core.config import settings
+from app.db import engine
+from app.db.engine import get_engine
 
-DATABASE_URL = settings.DATABASE_URL
-
-engine = create_engine(
-    DATABASE_URL,
-    echo=settings.SQL_ECHO,
-    future=True,
-    pool_pre_ping=True,
-)
+engine = get_engine()  # noqa: F811
 
 SessionLocal = sessionmaker(
     bind=engine,
-    class_=Session,
-    autocommit=False,
     autoflush=False,
+    autocommit=False,
 )
+
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+DbSession = Annotated[Session, Depends(get_db)]

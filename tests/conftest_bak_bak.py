@@ -1,9 +1,7 @@
-from typing import Generator
-
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool, create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 import app.db.base  # noqa: F401
 from app.db.base_class import Base
@@ -38,33 +36,40 @@ TestingSessionLocal = sessionmaker(
 # ---------------------------------------------------------
 
 
-@pytest.fixture(scope="session")
-def db_session():
-    # 1. Cria as tabelas usando o engine global com StaticPool
+@pytest.fixture(scope="session", autouse=True)
+def create_test_database():
+    """
+    Cria todas as tabelas antes da sessão de testes
+    e remove após finalizar.
+    """
+    print(Base.metadata.tables.keys())
     Base.metadata.create_all(bind=engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
 
-    # 2. Mantém UMA conexão viva para a sessão inteira
+
+# ---------------------------------------------------------
+# Sessão de banco para cada teste
+# ---------------------------------------------------------
+
+
+@pytest.fixture
+def db_session(create_test_database) -> DbGenerator:
+    """
+    Cria uma nova transação por teste.
+    Faz rollback ao final.
+    """
     connection = engine.connect()
+    transaction = connection.begin()
+
     session = TestingSessionLocal(bind=connection)
 
     try:
         yield session
     finally:
-        # 3. Só dropa e fecha TUDO ao final da suíte de testes (session)
         session.close()
-        Base.metadata.drop_all(bind=engine)
+        transaction.rollback()
         connection.close()
-
-
-@pytest.fixture(autouse=True)
-def clean_database(db_session: Generator[Session, Any, Any]):
-    """
-    Limpa os dados das tabelas entre os testes, mas mantém a estrutura.
-    """
-    yield
-    for table in reversed(Base.metadata.sorted_tables):
-        db_session.execute(table.delete())
-    db_session.commit()
 
 
 # ---------------------------------------------------------

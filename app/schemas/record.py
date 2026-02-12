@@ -6,14 +6,26 @@ from pydantic import BaseModel, Field
 
 
 class SourceSchema(BaseModel):
-    name: str = Field(..., example="Diário Oficial da União")
-    url: Optional[str] = Field(None, example="https://www.in.gov.br")
-    method: str = Field(..., example="scraping")  # scraping | download | api
-    license: Optional[str] = Field(None, example="CC-BY")
+    name: Optional[str] = Field(
+        default=None,
+        examples=[
+            "Diário Oficial da União",
+            "Tribunal de Justiça do Estado de São Paulo",
+        ],
+    )
+    url: Optional[str] = Field(
+        default=None, examples=["https://www.in.gov.br"]
+    )
+    method: str = Field(
+        examples=["scraping", "download", "api"]
+    )  # scraping | download | api
+    license: Optional[str] = Field(None, examples=["CC-BY"])
 
 
 class RecordBase(BaseModel):
-    type: str = Field(..., example="document")
+    type: str = Field(
+        examples=["legislation", "jurisprudence", "administrative_act"]
+    )
     title: str
     summary: Optional[str]
     source: SourceSchema
@@ -34,3 +46,7 @@ class RecordResponse(RecordBase):
 
     class Config:
         from_attributes = True
+
+
+class RecordListResponse(BaseModel):
+    records: list[RecordResponse]

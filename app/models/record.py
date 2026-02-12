@@ -8,11 +8,12 @@ from sqlalchemy import JSON, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
+from app.db.base_class import Base
 
 
 class Record(Base):
     __tablename__ = "records"
+    __table_args__ = {"extend_existing": True}
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
