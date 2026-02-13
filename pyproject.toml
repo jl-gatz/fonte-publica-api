@@ -8,8 +8,9 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.13,<4.0"
 dependencies = [
-    "fastapi[standard] (>=0.128.0,<0.129.0)",
-    "pydantic-settings (>=2.12.0,<3.0.0)"
+    "fastapi[standard] (>=0.128.0,<0.130.0)",
+    "pydantic-settings (>=2.12.0,<3.0.0)",
+    "sqlalchemy (>=2.0.46,<3.0.0)"
 ]
 
 [build-system]
@@ -23,7 +24,8 @@ pytest-cov = "^7.0.0"
 taskipy = "^1.14.1"
 
 [tool.taskipy.tasks]
-run = 'fastapi dev fonte_publica_api/app/main.py'
+run = 'fastapi dev app/main.py'
+ruvicorn = "uvicorn app.main:app --reload"
 pre_test = 'task lint'
 test = 'pytest -s -x --cov=fonte_publica_api -vv'
 post_test = 'coverage html'
