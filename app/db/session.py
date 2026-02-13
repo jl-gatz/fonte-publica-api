@@ -3,12 +3,7 @@ from typing import Annotated, Generator
 from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.db.engine import get_engine
-
-engine = get_engine()
-
 SessionLocal = sessionmaker(
-    bind=engine,
     autoflush=False,
     autocommit=False,
 )
