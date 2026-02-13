@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.v1.router import api_router
+from app.api.v1.routers import api_router
 from app.core.config import settings
 from app.db.engine import create_db_engine
 from app.db.session import SessionLocal

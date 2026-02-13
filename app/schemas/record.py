@@ -1,25 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
-
-class SourceSchema(BaseModel):
-    name: Optional[str] = Field(
-        default=None,
-        examples=[
-            "Diário Oficial da União",
-            "Tribunal de Justiça do Estado de São Paulo",
-        ],
-    )
-    url: Optional[str] = Field(
-        default=None, examples=["https://www.in.gov.br"]
-    )
-    method: str = Field(
-        examples=["scraping", "download", "api"]
-    )  # scraping | download | api
-    license: Optional[str] = Field(None, examples=["CC-BY"])
+from app.schemas.source import SourceSchema
 
 
 class RecordBase(BaseModel):
@@ -34,6 +19,13 @@ class RecordBase(BaseModel):
 
 class RecordCreate(RecordBase):
     collected_at: datetime
+
+    @field_validator("collected_at")
+    @classmethod
+    def ensure_aware(cls, v: datetime):
+        if v.tzinfo is None:
+            raise ValueError("Datetime must be timezone-aware")
+        return v.astimezone(timezone.utc)
 
 
 class RecordResponse(RecordBase):

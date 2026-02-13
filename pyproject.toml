@@ -27,8 +27,9 @@ taskipy = "^1.14.1"
 run = 'fastapi dev app/main.py'
 ruvicorn = "uvicorn app.main:app --reload"
 pre_test = 'task lint'
-test = 'pytest -s -x --cov=fonte_publica_api -vv'
+test = 'pytest -s -x --cov=app -vv'
 post_test = 'coverage html'
+test_conf = "pytest -v -s --setup-show"
 lint = 'ruff check . && ruff check . --diff'
 format = 'ruff check . --fix && ruff format .'
 
