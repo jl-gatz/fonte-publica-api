@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from typing import List
 
 from fastapi import APIRouter
 
@@ -22,10 +21,13 @@ def create_new_record(payload: RecordCreate, db: DbSession):
 
 @router.get(
     "",
-    response_model=List[RecordResponse],
+    response_model=list[RecordResponse],
     status_code=HTTPStatus.OK,
 )
 def list_records(db: DbSession):
+    print("Listando registros...")
+    print(id(db))
+
     return list_records_service(db)
 
 

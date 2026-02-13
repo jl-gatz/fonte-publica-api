@@ -48,5 +48,5 @@ class RecordResponse(RecordBase):
         from_attributes = True
 
 
-class RecordListResponse(BaseModel):
-    records: list[RecordResponse]
+# class RecordListResponse(BaseModel):
+#     records: list[RecordResponse]

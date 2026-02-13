@@ -176,7 +176,6 @@ pyrightconfig.json
 # Fragmentos
 __pycache__/
 .history/
-file::memory:
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
