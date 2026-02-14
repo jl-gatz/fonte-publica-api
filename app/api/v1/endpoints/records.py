@@ -3,6 +3,7 @@ from http import HTTPStatus
 from fastapi import APIRouter
 
 from app.db.types import DbSession
+from app.dependecies.time_deps import UTCNow
 from app.schemas.record import RecordCreate, RecordResponse
 from app.services.record_service import create_record, list_records_service
 
@@ -14,8 +15,8 @@ router = APIRouter()
 @router.post(
     "/", status_code=HTTPStatus.CREATED, response_model=RecordResponse
 )
-def create_new_record(payload: RecordCreate, db: DbSession):
-    record = create_record(db, payload)
+def create_new_record(payload: RecordCreate, db: DbSession, now: UTCNow):
+    record = create_record(db, payload, now=now)
     return record
 
 
