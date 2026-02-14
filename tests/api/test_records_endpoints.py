@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from fastapi.encoders import jsonable_encoder
 from fastapi.testclient import TestClient
 
 
@@ -25,8 +26,8 @@ def test_create_records(client: TestClient):
         "hash": "testhash123",
         "attributes": {"tema": "transparência"},
     }
-
-    response = client.post("api/v1/records/", json=payload)
+    jasao = jsonable_encoder(payload)
+    response = client.post("api/v1/records/", json=jasao)
     assert response.status_code == HTTPStatus.CREATED
     data = response.json()
     assert data["title"] == payload["title"]

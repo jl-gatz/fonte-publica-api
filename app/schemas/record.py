@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Dict, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.schemas.source import SourceSchema
 
@@ -36,8 +36,7 @@ class RecordResponse(RecordBase):
     version: int
     hash: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # class RecordListResponse(BaseModel):

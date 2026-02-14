@@ -48,7 +48,7 @@ exclude = [".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".history"
 
 [tool.ruff.lint]
 preview = true
-select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'FAST']
+select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'DTZ', 'FAST']
 
 [tool.ruff.format]
 preview = true

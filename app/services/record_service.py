@@ -13,7 +13,7 @@ def generate_hash(payload: dict) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def create_record(db: Session, data: RecordCreate) -> Record:
+def create_record(db: Session, data: RecordCreate, now: datetime) -> Record:
     payload = data.model_dump()
     record_hash = generate_hash(payload)
 

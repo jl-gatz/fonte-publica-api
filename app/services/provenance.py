@@ -1,9 +1,12 @@
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def generate_provenance(payload: dict) -> str:
-    material = {"payload": payload, "timestamp": datetime.utcnow().isoformat()}
+    material = {
+        "payload": payload,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
     raw = json.dumps(material, sort_keys=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
