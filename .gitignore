@@ -125,6 +125,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.dev
+.env.prod
 .venv
 env/
 venv/
@@ -176,6 +178,8 @@ pyrightconfig.json
 # Fragmentos
 __pycache__/
 .history/
+*.bak.py
+fake*.py
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python

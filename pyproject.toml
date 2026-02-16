@@ -10,8 +10,13 @@ requires-python = ">=3.13,<4.0"
 dependencies = [
     "fastapi[standard] (>=0.128.0,<0.130.0)",
     "pydantic-settings (>=2.12.0,<3.0.0)",
-    "sqlalchemy (>=2.0.46,<3.0.0)"
+    "sqlalchemy (>=2.0.46,<3.0.0)",
+    "orjson (>=3.11.7,<4.0.0)"
 ]
+
+[[tool.poetry.packages]]
+include = "fonte-publica-api"
+from = "app"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
