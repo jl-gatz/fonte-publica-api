@@ -5,7 +5,8 @@ def utc_now() -> datetime:
     """
     Returns a timezone-aware UTC datetime.
     """
-    return datetime.now(timezone.utc)
+    time = datetime.now(timezone.utc)
+    return time
 
 
 def ensure_aware(dt: datetime) -> datetime:
