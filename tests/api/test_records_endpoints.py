@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-from fastapi.encoders import jsonable_encoder
 from fastapi.testclient import TestClient
 
 
@@ -20,14 +19,15 @@ def test_create_records(client: TestClient):
             "method": "download",
             "url": "https://www.planalto.gov.br",
         },
-        "collected_at": "2024-06-01T12:00:00Z",
+        "collected_at": "2024-06-01T00:00:00Z",
         "status": "published",
         "version": 1,
         "hash": "testhash123",
         "attributes": {"tema": "transparência"},
     }
-    jasao = jsonable_encoder(payload)
-    response = client.post("api/v1/records/", json=jasao)
+
+    response = client.post("/api/v1/records/", json=payload)
+
     assert response.status_code == HTTPStatus.CREATED
     data = response.json()
     assert data["title"] == payload["title"]

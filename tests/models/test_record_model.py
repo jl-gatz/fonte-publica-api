@@ -26,7 +26,7 @@ def test_create_and_list_record(db_session):
     db_session.refresh(record)
 
     # Assert criação
-    assert isinstance(record.id, UUID)
+    assert UUID(record.id)
     assert record.title == "Lei de Acesso à Informação"
 
     # Assert listagem
