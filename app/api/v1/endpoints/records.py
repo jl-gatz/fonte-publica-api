@@ -1,9 +1,13 @@
+from datetime import datetime
 from http import HTTPStatus
+from typing import Annotated
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
+from app.core.time import utc_now
+from app.db.dependencies import get_db
 from app.db.types import DbSession
-from app.dependecies.time_deps import UTCNow
 from app.schemas.record import RecordCreate, RecordResponse
 from app.services.record_service import create_record, list_records_service
 
@@ -13,11 +17,17 @@ router = APIRouter()
 
 
 @router.post(
-    "/", status_code=HTTPStatus.CREATED, response_model=RecordResponse
+    "/",
+    status_code=HTTPStatus.CREATED,
+    response_model=RecordResponse,
 )
-def create_new_record(payload: RecordCreate, db: DbSession, now: UTCNow):
-    record = create_record(db, payload, now=now)
-    return record
+def create_new_record(
+    payload: RecordCreate,
+    db: Annotated[Session, Depends(get_db)],
+    now: Annotated[datetime, Depends(utc_now)],
+):
+    record = create_record(payload, db, now=now)
+    return RecordResponse.model_validate(record)
 
 
 @router.get(
@@ -26,9 +36,6 @@ def create_new_record(payload: RecordCreate, db: DbSession, now: UTCNow):
     status_code=HTTPStatus.OK,
 )
 def list_records(db: DbSession):
-    print("Listando registros...")
-    print(id(db))
-
     return list_records_service(db)
 
 

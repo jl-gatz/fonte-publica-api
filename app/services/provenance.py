@@ -1,6 +1,6 @@
-import hashlib
-import json
 from datetime import datetime, timezone
+
+from app.utils.hashing import generate_hash
 
 
 def generate_provenance(payload: dict) -> str:
@@ -8,5 +8,4 @@ def generate_provenance(payload: dict) -> str:
         "payload": payload,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
-    raw = json.dumps(material, sort_keys=True).encode("utf-8")
-    return hashlib.sha256(raw).hexdigest()
+    return generate_hash(material, encode="utf-8")
