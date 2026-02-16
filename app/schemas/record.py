@@ -1,25 +1,11 @@
-from datetime import datetime
+from datetime import datetime as dt
+from datetime import timezone as tz
 from typing import Dict, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
-
-class SourceSchema(BaseModel):
-    name: Optional[str] = Field(
-        default=None,
-        examples=[
-            "Diário Oficial da União",
-            "Tribunal de Justiça do Estado de São Paulo",
-        ],
-    )
-    url: Optional[str] = Field(
-        default=None, examples=["https://www.in.gov.br"]
-    )
-    method: str = Field(
-        examples=["scraping", "download", "api"]
-    )  # scraping | download | api
-    license: Optional[str] = Field(None, examples=["CC-BY"])
+from app.schemas.source import SourceSchema
 
 
 class RecordBase(BaseModel):
@@ -30,22 +16,36 @@ class RecordBase(BaseModel):
     summary: Optional[str]
     source: SourceSchema
     attributes: Optional[Dict] = Field(default_factory=dict)
+    collected_at: dt
 
 
 class RecordCreate(RecordBase):
-    collected_at: datetime
+    published_at: Optional[dt] = Field(default_factory=lambda: dt.now(tz.utc))
+
+    # @classmethod
+    # @field_serializer("collected_at", "published_at")
+    # def serialize_datetime(self, dt: dt, _info):
+    #     return dt.isoformat()
+
+    # @field_validator("collected_at")
+    # @classmethod
+    # def ensure_aware(cls, v: datetime):
+    #     if v.tzinfo is None:
+    #         raise ValueError("Datetime must be timezone-aware")
+    #     return v.astimezone(timezone.utc)
 
 
 class RecordResponse(RecordBase):
     id: UUID
-    collected_at: datetime
-    published_at: datetime
+    collected_at: dt
+    published_at: dt
     status: str
     version: int
     hash: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
 
 
 # class RecordListResponse(BaseModel):

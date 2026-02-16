@@ -1,3 +1,6 @@
 {
-    "python.defaultInterpreterPath": "/home/lgaubatz/projetos/fonte-publica-api/.venv/bin/"
+  "python.defaultInterpreterPath": "/home/lgaubatz/projetos/fonte-publica-api/.venv/bin/",
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true
 }

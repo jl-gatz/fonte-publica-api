@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID
 
 from app.models.record import Record
@@ -14,7 +14,7 @@ def test_create_and_list_record(db_session):
             "method": "download",
             "url": "https://www.planalto.gov.br",
         },
-        collected_at=datetime.utcnow(),
+        collected_at=datetime.now(timezone.utc),
         status="published",
         version=1,
         hash="testhash123",
@@ -26,7 +26,7 @@ def test_create_and_list_record(db_session):
     db_session.refresh(record)
 
     # Assert criação
-    assert isinstance(record.id, UUID)
+    assert UUID(record.id)
     assert record.title == "Lei de Acesso à Informação"
 
     # Assert listagem

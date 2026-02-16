@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db.base import Base
-from app.db.session import SessionLocal
+from app.db.dependencies import get_db
 from app.main import create_app
 
 
@@ -18,15 +18,32 @@ def client():
         poolclass=StaticPool,
     )
 
-    app = create_app(database_url="sqlite://")
-
-    # Rebind correto
-    SessionLocal.configure(bind=engine)
+    TestingSessionLocal = sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=engine,
+    )
 
     Base.metadata.create_all(bind=engine)
 
+    app = create_app(engine=engine)
+
+    def override_get_db():
+        db = TestingSessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    # 🔑 AQUI está a chave
+    app.dependency_overrides[get_db] = override_get_db
+
     with TestClient(app) as client:
         yield client
+
+    print("\n[Teardown] Fechando cliente e limpando dados...")
+    TestingSessionLocal.close_all()
+    engine.dispose()
 
 
 @pytest.fixture

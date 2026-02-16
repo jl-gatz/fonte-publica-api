@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DATABASE_URL: str = "sqlite+pysqlite:///:memory:"
     SQL_ECHO: bool = False
+    DEBUG: bool = True
 
     class Config:
         env_file = ".env"
