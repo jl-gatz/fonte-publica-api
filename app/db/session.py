@@ -1,4 +1,6 @@
-from sqlalchemy.orm import sessionmaker
+from typing import Generator
+
+from sqlalchemy.orm import Session, sessionmaker
 
 SessionLocal = sessionmaker(
     autoflush=False,
@@ -7,12 +9,12 @@ SessionLocal = sessionmaker(
 )
 
 
-# def get_db() -> Generator[Session, None, None]:
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 # DbSession = Annotated[Session, Depends(get_db)]
