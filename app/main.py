@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.orm import sessionmaker
 
 from app.api.v1.routers import api_router
-from app.core.config import settings
-from app.db.engine import create_db_engine
+from app.core.config import get_settings
+
+settings = get_settings()
 
 
-def create_app(engine=None) -> FastAPI:
+def create_app() -> FastAPI:
 
     app = FastAPI(
         title="Fonte Pública API",
@@ -26,16 +26,6 @@ def create_app(engine=None) -> FastAPI:
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
         },
         default_response_class=ORJSONResponse,
-    )
-
-    if engine is None:
-        engine = create_db_engine(settings.DATABASE_URL)
-
-    app.state.engine = engine
-    app.state.SessionLocal = sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=engine,
     )
 
     app.include_router(api_router, prefix=settings.API_V1_STR)

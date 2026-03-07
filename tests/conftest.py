@@ -26,7 +26,7 @@ def client():
 
     Base.metadata.create_all(bind=engine)
 
-    app = create_app(engine=engine)
+    app = create_app()
 
     def override_get_db():
         db = TestingSessionLocal()

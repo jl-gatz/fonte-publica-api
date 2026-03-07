@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app.core.config import settings
+from app.core.config import get_settings
 from app.core.runtime import START_TIME
-from app.db.session import get_db
+from app.db.dependencies import get_db
 from app.schemas.health import (
     DatabaseStatus,
     HealthResponse,
@@ -16,6 +16,7 @@ from app.schemas.health import (
 from app.utils.time import format_uptime
 
 router = APIRouter()
+settings = get_settings()
 
 
 @router.get(
