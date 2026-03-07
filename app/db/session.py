@@ -1,20 +1,12 @@
-from typing import Generator
+from sqlalchemy.orm import sessionmaker
 
-from sqlalchemy.orm import Session, sessionmaker
+from app.db.engine import create_db_engine
+
+engine = create_db_engine()
 
 SessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,
     expire_on_commit=False,
+    bind=engine,
 )
-
-
-def get_db() -> Generator[Session, None, None]:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-# DbSession = Annotated[Session, Depends(get_db)]

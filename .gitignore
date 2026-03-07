@@ -127,6 +127,7 @@ celerybeat.pid
 .env
 .env.dev
 .env.prod
+.env.test
 .venv
 env/
 venv/
@@ -180,6 +181,8 @@ __pycache__/
 .history/
 *.bak.py
 fake*.py
+.vscode/
+*.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
